@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import InputForm from './InputForm';
+import ExpenseForecast from './ExpenseForecast';
+import dataset from './data';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  const [placeOfWork, setPlaceOfWork] = useState('');
+  const [incomeTotal, setIncomeTotal] = useState(null);
+
+  const handleFormSubmit = (place, income) => {
+    setPlaceOfWork(place);
+    setIncomeTotal(income);
+  };
+
+  const forecasts = dataset.map(place => ({
+    ...place,
+    rent: place.rent,
+    dailyExpense: place.dailyExpense,
+  }));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>TenancyIQ</h1>
+      <InputForm onSubmit={handleFormSubmit} />
+      {incomeTotal !== null && (
+        <ExpenseForecast placeOfWork={placeOfWork} incomeTotal={incomeTotal} forecasts={forecasts} />
+      )}
     </div>
   );
 }
